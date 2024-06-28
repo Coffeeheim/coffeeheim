@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "coffeeheim"
+version = "0.1.0"
+description = ""
+authors = ["Sérgio Rafael Siqueira <osergiosiqueira@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+steam = "^1.4.4"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.4.2"
+
+
+[tool.black]
+line-length = 79
+skip-string-normalization = 1
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
