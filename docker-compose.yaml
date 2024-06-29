@@ -10,6 +10,7 @@ services:
     ports:
       - "2456-2458:2456-2458/udp"
       - "9001:9001/tcp"
+      - "80:80/tcp"
     environment:
       - SERVER_PASS=${SERVER_PASS}
     env_file:
