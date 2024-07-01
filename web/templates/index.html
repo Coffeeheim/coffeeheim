@@ -1,0 +1,33 @@
+{% extends "base.html" %} {% block body %}
+<h2 class="font-semibold text-2xl">Rules</h2>
+<ul class="list-decimal list-inside">
+  <li>It's prohibited to destroy constructions; improve them instead.</li>
+  <li>Don't steal items from other players; be kind and ask first.</li>
+  <li>
+    You can use existing characters, but don't bring items from another server.
+    Think of it as starting fresh in a new world.
+  </li>
+  <li>
+    If someone asks for help to defeat a creature, the dropped items belong to
+    the player who asked for help, even if they did the least part.
+  </li>
+</ul>
+
+<form
+  action="#"
+  class="border bg-gray-50 p-5 space-y-2.5 rounded-md lg:w-2/4"
+  method="post"
+>
+  <p class="bg-yellow-100 p-2 border border-yellow-400">
+    If you would like to join us on Valheim, submit the following form.
+  </p>
+  <div>
+    <label class="space-y-0.5">
+      <div>Your steamID, steamID3, steamID64, customURL or complete URL.</div>
+      <input name="steamid" class="border border-gray-400 p-2 rounded w-full" />
+    </label>
+  </div>
+  <button class="py-2 px-4 text-white bg-indigo-600 rounded">Submit</button>
+</form>
+
+{% endblock %}
