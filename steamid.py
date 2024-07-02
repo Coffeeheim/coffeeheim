@@ -28,7 +28,7 @@ def get_steamid_64(username: str) -> int:
     >>> get_steamid_64('')
     Traceback (most recent call last):
       ...
-    ValueError: User not found
+    ValueError: User not found.
     """
     if not uri_validator(username):
         username = f'https://steamcommunity.com/id/{username}'
@@ -36,7 +36,7 @@ def get_steamid_64(username: str) -> int:
     sid = steamid.from_url(username)
 
     if not sid:
-        raise ValueError('User not found')
+        raise ValueError('User not found.')
 
     return sid.as_64
 

@@ -1,5 +1,8 @@
+import json
+import os
+
 from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
@@ -15,3 +18,15 @@ async def index(request: Request):
         request=request,
         name='index.html',
     )
+
+
+@app.get('/status', response_class=JSONResponse)
+async def status(request: Request):
+    path = 'data/htdocs/status.json'
+    content = {}
+
+    if os.path.exists(path):
+        with open(path) as f:
+            content = json.load(f)
+
+    return JSONResponse(content=content)
