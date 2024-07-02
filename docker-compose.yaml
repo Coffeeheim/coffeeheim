@@ -31,6 +31,6 @@ services:
     build: .
     container_name: app
     volumes:
-      - .:/app
+      - .:/code
     ports:
       - 80:80
