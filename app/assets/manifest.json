@@ -1,0 +1,26 @@
+{
+    "name": "Coffeeheim",
+    "short_name": "Coffeeheim",
+    "start_url": ".",
+    "display": "standalone",
+    "theme_color": "#ffffff",
+    "background_color": "#ffffff",
+    "description": "Just another valheim server",
+    "icons": [
+        {
+            "src": "coffeeheim-64x64.webp",
+            "sizes": "64x64",
+            "type": "image/webp"
+        },
+        {
+            "src": "coffeeheim-512x512.webp",
+            "sizes": "512x512",
+            "type": "image/webp"
+        },
+        {
+            "src": "coffeeheim-1080x1080.webp",
+            "sizes": "1080x1080",
+            "type": "image/webp"
+        }
+    ]
+}

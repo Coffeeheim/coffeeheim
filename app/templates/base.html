@@ -1,8 +1,13 @@
 <!doctype html>
 <html>
     <head>
+        <title>Coffeeheim</title>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link
+            rel="manifest"
+            href="{{ url_for('assets', path='/manifest.json') }}"
+        />
         <script src="https://cdn.tailwindcss.com"></script>
     </head>
 
@@ -10,10 +15,13 @@
         <div class="max-w-screen-md mx-auto">
             <header class="mb-5 space-y-2 md:flex justify-between">
                 <div class="flex">
-                    <img
-                        src="{{ url_for('assets', path='/coffeeheim.webp') }}"
-                        class="h-12 mr-2.5 rounded-lg"
-                    />
+                    <div
+                        class="w-12 h-12 mr-2.5 rounded-lg bg-gray-100 overflow-hidden"
+                    >
+                        <img
+                            src="{{ url_for('assets', path='/coffeeheim-512x512.webp') }}"
+                        />
+                    </div>
                     <h1 class="font-bold text-5xl">Coffeeheim</h1>
                     <div>
                         <span
