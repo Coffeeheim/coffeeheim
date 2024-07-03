@@ -16,5 +16,15 @@
 // }
 
 export function onRequest(context) {
-  return new Response('Hello, world!')
+  console.log(context)
+  const webSocketPair = new WebSocketPair()
+  const [client, server] = Object.values(webSocketPair)
+
+  server.accept()
+
+  return new Response(null, {
+    status: 101,
+    webSocket: client,
+  })
+  // return new Response('Hello, world!')
 }
