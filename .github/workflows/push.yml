@@ -6,6 +6,9 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./app
     environment: production
     permissions:
       contents: read
@@ -31,5 +34,4 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: coffeeheim
           directory: ./build
-          workingDirectory: ./app
           wranglerVersion: '3'
