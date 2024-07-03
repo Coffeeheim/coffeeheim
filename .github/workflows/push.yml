@@ -6,10 +6,12 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    environment: production
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
     defaults:
       run:
         working-directory: ./app
-    environment: production
     permissions:
       contents: read
       deployments: write
@@ -23,8 +25,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+
       - run: npm install
       - run: npm run build
       - run: npx wrangler pages deploy build
