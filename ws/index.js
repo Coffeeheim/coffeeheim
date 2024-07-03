@@ -22,3 +22,5 @@ async function handleRequest(request) {
     webSocket: client,
   })
 }
+
+export default handleRequest
