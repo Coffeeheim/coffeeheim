@@ -34,4 +34,5 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: coffeeheim
           directory: ./build
+          branch: main
           wranglerVersion: '3'
