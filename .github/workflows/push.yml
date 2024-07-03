@@ -23,8 +23,9 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm i
+      - run: npm install
       - run: npm run build
+      - run: ls -l
       - name: Checkout
         uses: actions/checkout@v3
       - name: Publish to Cloudflare Pages
@@ -35,5 +36,5 @@ jobs:
           projectName: coffeeheim
           directory: ./build
           branch: main
-          workingDirectory: ./app
+          workingDirectory: ./
           wranglerVersion: '3'
