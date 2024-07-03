@@ -10,6 +10,9 @@ jobs:
     environment: production
     env:
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+    defaults:
+      run:
+        working-directory: ./app
     permissions:
       contents: read
       deployments: write
@@ -23,14 +26,20 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-        working-directory: ./app
       - run: npm install
       - run: npm run build
       - run: npx wrangler pages deploy --project-name coffeeheim build/
 
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    timeout-minutes: 60
+    defaults:
+      run:
+        working-directory: ./ws
+    steps:
       - uses: actions/checkout@v4
       - name: Build & Deploy Worker
-        working-directory: ./ws
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
