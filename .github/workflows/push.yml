@@ -23,18 +23,10 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
+      - name: Publish to Cloudflare Pages
       - run: npm install
       - run: npm run build
-      - run: ls -l
-      - run: pwd
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Publish to Cloudflare Pages
-        uses: cloudflare/pages-action@v1
+      - run: npx wrangler pages deploy build
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: coffeeheim
-          directory: ./app/build
-          branch: main
-          wranglerVersion: '3'
