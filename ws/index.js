@@ -1,7 +1,7 @@
 async function handleRequest(request) {
   const upgradeHeader = request.headers.get('Upgrade')
   if (!upgradeHeader || upgradeHeader !== 'websocket') {
-    return new Response('Expected Upgrade: websocket', { status: 426 })
+    return new Response('Expected websocket', { status: 426 })
   }
 
   const [client, server] = Object.values(new WebSocketPair())
