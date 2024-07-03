@@ -1,0 +1,3 @@
+name = "coffeeheim"
+pages_build_output_dir = "./build"
+compatibility_date = "2022-07-12"
