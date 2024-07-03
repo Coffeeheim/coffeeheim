@@ -17,25 +17,20 @@ jobs:
       matrix:
         node-version: [16.x]
     name: Publish to Cloudflare Pages
-    working-directory: ./app
     steps:
       - uses: actions/checkout@v2
       - name: Publish to Cloudflare Pages
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
+        working-directory: ./app
       - run: npm install
       - run: npm run build
       - run: npx wrangler pages deploy --project-name coffeeheim build/
 
-  deploy:
-    runs-on: ubuntu-latest
-    environment: production
-    timeout-minutes: 60
-    working-directory: ./ws
-    steps:
       - uses: actions/checkout@v4
       - name: Build & Deploy Worker
+        working-directory: ./ws
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
