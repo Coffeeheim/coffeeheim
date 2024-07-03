@@ -1,14 +1,14 @@
-import { AutoRouter } from "itty-router";
-import html from "./index.html";
+import { AutoRouter } from 'itty-router'
+import html from './index.html'
 
-const router = AutoRouter();
+const router = AutoRouter()
 
-router.get("/", () => {
+router.get('/', () => {
   return new Response(html, {
     headers: {
-      "Content-Type": "text/html;charset=UTF-8",
+      'content-type': 'text/html;charset=UTF-8',
     },
-  });
-});
+  })
+})
 
-export default { ...router };
+export default { ...router }
