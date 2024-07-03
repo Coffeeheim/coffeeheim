@@ -1,3 +1,4 @@
 name = "coffeeheim-websocket"
-main = "ws/index.js"
 compatibility_date = "2024-01-01"
+
+main = "ws/index.js"
