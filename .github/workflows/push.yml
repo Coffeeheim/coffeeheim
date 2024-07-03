@@ -15,7 +15,7 @@ jobs:
       deployments: write
     strategy:
       matrix:
-        node-version: [14.x]
+        node-version: [16.x]
     name: Publish to Cloudflare Pages
     steps:
       - uses: actions/checkout@v2
