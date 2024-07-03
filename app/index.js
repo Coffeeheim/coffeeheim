@@ -1,7 +1,7 @@
-import { Router } from "itty-router";
+import { AutoRouter } from "itty-router";
 import html from "./index.html";
 
-const router = Router();
+const router = AutoRouter();
 
 router.get("/", () => {
   return new Response(html, {
@@ -11,10 +11,4 @@ router.get("/", () => {
   });
 });
 
-router.all("*", () => {
-  return new Response("404, not found!", { status: 404 });
-});
-
-addEventListener("fetch", (e) => {
-  e.respondWith(router.handle(e.request));
-});
+export default { ...router };
