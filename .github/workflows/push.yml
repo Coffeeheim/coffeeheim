@@ -23,7 +23,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm install
+      - run: npm i
       - run: npm run build
       - name: Checkout
         uses: actions/checkout@v3
@@ -35,4 +35,5 @@ jobs:
           projectName: coffeeheim
           directory: ./build
           branch: main
+          workingDirectory: ./app
           wranglerVersion: '3'
