@@ -28,4 +28,4 @@ jobs:
 
       - run: npm install
       - run: npm run build
-      - run: npx wrangler pages deploy build
+      - run: npx wrangler pages deploy --project-name coffeeheim build/
