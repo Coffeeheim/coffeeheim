@@ -34,9 +34,6 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     timeout-minutes: 60
-    defaults:
-      run:
-        working-directory: ./ws
     name: Build & Deploy Worker
     steps:
       - uses: actions/checkout@v4
