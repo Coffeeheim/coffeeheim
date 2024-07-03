@@ -23,6 +23,7 @@ router.get('/ws', (req) => {
   websocket.send(JSON.stringify({ connected: true }))
 
   websocket.addEventListener('message', async ({ data }) => {
+    console.log(data)
     websocket.send(JSON.stringify({ data }))
   })
 
