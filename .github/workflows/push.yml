@@ -1,21 +1,25 @@
-name: Deploy Worker
-
 on:
   push:
     branches:
       - main
+
 jobs:
-  deploy:
+  publish:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./app
     environment: production
-    timeout-minutes: 60
+    permissions:
+      contents: read
+      deployments: write
+    name: Publish to Cloudflare Pages
     steps:
-      - uses: actions/checkout@v4
-      - name: Build & Deploy Worker
-        uses: cloudflare/wrangler-action@v3
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Publish to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: coffeeheim
+          directory: ./build
+          workingDirectory: ./app
+          wranglerVersion: '3'
