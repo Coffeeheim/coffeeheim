@@ -1,5 +1,8 @@
 {
   "devDependencies": {
     "wrangler": "^3.63.0"
+  },
+  "dependencies": {
+    "itty-router": "^5.0.17"
   }
 }
