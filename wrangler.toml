@@ -2,3 +2,7 @@ name = "coffeeheim-websocket"
 compatibility_date = "2024-01-01"
 
 main = "ws/index.js"
+
+kv_namespaces = [
+  { binding = "kv", id = "nRLTKQp7MPZ98Kgh87uHUt" }
+]
