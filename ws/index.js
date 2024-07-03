@@ -1,20 +1,17 @@
-addEventListener('fetch', (event) => {
-  event.respondWith(handleRequest(event.request))
-})
-
 async function handleRequest(request) {
-  if (request.headers.get('Upgrade') !== 'websocket') {
-    return new Response('Expected websocket', { status: 400 })
+  const upgradeHeader = request.headers.get('Upgrade')
+  if (!upgradeHeader || upgradeHeader !== 'websocket') {
+    return new Response('Expected Upgrade: websocket', { status: 426 })
   }
 
   const [client, server] = Object.values(new WebSocketPair())
-
-  websocket.accept()
-  websocket.addEventListener('message', async ({ data }) => {
-    websocket.send(JSON.stringify({ tz: new Date() }))
+  server.accept()
+  server.addEventListener('message', async ({ data }) => {
+    console.log(data)
+    server.send(JSON.stringify({ tz: new Date() }))
   })
 
-  websocket.addEventListener('close', async (event) => {
+  server.addEventListener('close', async (event) => {
     console.log(event)
   })
 
