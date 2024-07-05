@@ -46,7 +46,7 @@ export default function Form() {
         className="border bg-gray-50 p-5 space-y-2.5 rounded-md lg:w-2/4"
       >
         {isSubmitSuccessful && (
-          <p className="bg-green-100 p-2 border border-green-400">
+          <p className="bg-green-100 p-2 border border-green-400 text-center">
             Done! The password is{' '}
             <span className="font-semibold bg-yellow-100 font-mono">
               fellowship
