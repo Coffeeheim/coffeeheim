@@ -40,7 +40,7 @@ client = paho.Client(
     callback_api_version=CallbackAPIVersion.VERSION2,
 )
 
-client.tls_set(tls_version=paho.ssl.PROTOCOL_TLS_SERVER)  # type: ignore
+client.tls_set(tls_version=paho.ssl.PROTOCOL_TLS)  # type: ignore
 client.username_pw_set(MQTT_USERNAME, MQTT_PASSWORD)
 client.connect(MQTT_HOST, 8883)
 
