@@ -1,36 +1,30 @@
 services:
-  valheim:
-    container_name: coffeeheim
-    image: ghcr.io/lloesche/valheim-server
-    cap_add:
-      - sys_nice
-    volumes:
-      - ./config:/config
-      - ./data:/opt/valheim
-    ports:
-      - "2456-2458:2456-2458/udp"
-      - "9001:9001/tcp"
-    environment:
-      - SERVER_PASS=${SERVER_PASS}
-    env_file:
-      - ./valheim.env
-    restart: always
-    stop_grace_period: 2m
+  # valheim:
+  #   container_name: coffeeheim
+  #   image: ghcr.io/lloesche/valheim-server
+  #   cap_add:
+  #     - sys_nice
+  #   volumes:
+  #     - ./config:/config
+  #     - ./data:/opt/valheim
+  #   ports:
+  #     - '2456-2458:2456-2458/udp'
+  #     - '9001:9001/tcp'
+  #   environment:
+  #     - SERVER_PASS=${SERVER_PASS}
+  #   env_file:
+  #     - ./valheim.env
+  #   restart: always
+  #   stop_grace_period: 2m
 
-  redis:
-    image: redis:latest
-    container_name: redis
-    ports:
-      - 6379:6379
-    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
-    volumes:
-      - ./redis.conf:/usr/local/etc/redis/redis.conf
-      - ./redis-volume:/data
-
-  app:
+  mqtt:
     build: .
-    container_name: app
+    container_name: mqtt_sub
+    environment:
+      - CLIENT_ID=Coffeeheim
+      - CONFIG_FILE=config/permittedlist.txt
+      - MQTT_HOST=${MQTT_HOST}
+      - MQTT_USERNAME=${MQTT_USERNAME}
+      - MQTT_PASSWORD=${MQTT_PASSWORD}
     volumes:
       - .:/code
-    ports:
-      - 80:80

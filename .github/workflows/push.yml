@@ -34,10 +34,14 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     timeout-minutes: 60
-    name: Build & Deploy Worker
+    name: Build & Deploy
     steps:
-      - uses: actions/checkout@v4
-      - uses: cloudflare/wrangler-action@v3
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      - uses: aws-actions/setup-sam@v1
+      - uses: aws-actions/configure-aws-credentials@v1
         with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: sa-east-1
+      - run: sam build --use-container

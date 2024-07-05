@@ -1,0 +1,37 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+
+Globals:
+  Function:
+    CodeUri: api/
+    Runtime: python3.12
+    Architectures:
+      - x86_64
+    Environment:
+      Variables:
+        LOG_LEVEL: DEBUG
+        POWERTOOLS_LOGGER_SAMPLE_RATE: 0.1
+        POWERTOOLS_LOGGER_LOG_EVENT: true
+        MQTT_HOST: '{{resolve:ssm:/coffeeheim/mqtt_host}}'
+        MQTT_USERNAME: '{{resolve:ssm:/coffeeheim/mqtt_username}}'
+        MQTT_PASSWORD: '{{resolve:ssm:/coffeeheim/mqtt_password}}'
+    Layers:
+      - !Sub arn:aws:lambda:${AWS::Region}:017000801446:layer:AWSLambdaPowertoolsPythonV2:69
+
+Resources:
+  HttpFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: handler.lambda_handler
+      FunctionUrlConfig:
+        AuthType: NONE
+        InvokeMode: BUFFERED
+        Cors:
+          AllowOrigins: ['*']
+          AllowMethods: [GET]
+          AllowHeaders: [Content-Type, X-Requested-With]
+
+Outputs:
+  HttpFunctionUrlEndpoint:
+    Value:
+      Fn::GetAtt: HttpFunctionUrl.FunctionUrl
