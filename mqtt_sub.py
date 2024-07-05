@@ -5,7 +5,6 @@ import paho.mqtt.client as paho
 from paho.mqtt.enums import CallbackAPIVersion
 
 import permittedlist
-from steamid import get_steamid_64
 
 CLIENT_ID: str = os.environ.get('CLIENT_ID')  # type: ignore
 CONFIG_FILE: str = os.environ.get('CONFIG_FILE')  # type: ignore
