@@ -1,32 +1,42 @@
+from http import HTTPStatus
+
 import paho.mqtt.client as paho
 from aws_lambda_powertools import Logger
 from aws_lambda_powertools.event_handler import LambdaFunctionUrlResolver
 from aws_lambda_powertools.logging import correlation_paths
 from aws_lambda_powertools.utilities.typing import LambdaContext
 from paho.mqtt.enums import CallbackAPIVersion
+from pydantic import BaseModel, HttpUrl
 
-from . import mqtt_pub, steamid
-from .configs import MQTT_HOST, MQTT_PASSWORD, MQTT_USERNAME
+import mqtt_pub
+import steamid
+from configs import MQTT_HOST, MQTT_PASSWORD, MQTT_USERNAME
 
 logger = Logger()
-app = LambdaFunctionUrlResolver()
+app = LambdaFunctionUrlResolver(enable_validation=True)
 mqtt_client = paho.Client(
     protocol=paho.MQTTv5,
     callback_api_version=CallbackAPIVersion.VERSION2,
 )
-mqtt_client.tls_set(tls_version=paho.ssl.PROTOCOL_TLS)  # type: ignore
+mqtt_client.tls_set(tls_version=paho.ssl.PROTOCOL_TLS_CLIENT)  # type: ignore
 mqtt_client.username_pw_set(MQTT_USERNAME, MQTT_PASSWORD)
 mqtt_client.connect(MQTT_HOST, 8883)
 
 
-@app.post('/')
-def index():
-    # mqtt_pub.publish(
-    #     payload=str(steamid.get_steamid_64('sergiors')),
-    #     mqtt_client=mqtt_client,
-    # )
+class Payload(BaseModel):
+    steamid: str | HttpUrl
 
-    return {}
+
+@app.post('/')
+def index(payload: Payload):
+    steamid_64 = steamid.get_steamid_64(str(payload.steamid))
+
+    mqtt_pub.publish(
+        payload=steamid_64,
+        mqtt_client=mqtt_client,
+    )
+
+    return {}, HTTPStatus.CREATED
 
 
 @logger.inject_lambda_context(

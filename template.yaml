@@ -28,7 +28,7 @@ Resources:
         InvokeMode: BUFFERED
         Cors:
           AllowOrigins: ['*']
-          AllowMethods: [POST]
+          AllowMethods: [GET, POST]
           AllowHeaders: [Content-Type, X-Requested-With]
 
 Outputs:

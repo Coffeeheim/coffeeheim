@@ -49,7 +49,7 @@ function Submit() {
       <div>
         <label className="space-y-0.5">
           <div>
-            Your steamID, steamID3, steamID64, customURL or complete URL
+            Your steamID64, customURL or complete URL
             <span className="text-sm">
               (
               <a
