@@ -1,7 +1,7 @@
 import os
 
 
-def append(path: str, steamid: str) -> bool | None:
+def append_row(path: str, steamid: str) -> bool | None:
     if not os.path.exists(path):
         raise FileNotFoundError
 

@@ -23,7 +23,8 @@ services:
     environment:
       - CLIENT_ID=Coffeeheim
       - PERMITTED_FILE=config/permittedlist.txt
-      - SQLITE_FILE=config/coffeeheim.db
+      - SQLITE_FILE=config/permittedlist.db
+      - SQLITE_TABLE=permittedlist
       - MQTT_HOST=${MQTT_HOST}
       - MQTT_USERNAME=${MQTT_USERNAME}
       - MQTT_PASSWORD=${MQTT_PASSWORD}

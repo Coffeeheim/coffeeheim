@@ -10,6 +10,7 @@ steam = "^1.4.4"
 aws-lambda-powertools = "^2.40.1"
 paho-mqtt = "^2.1.0"
 pydantic = "^2.8.2"
+pytz = "^2024.1"
 
 
 [tool.poetry.group.dev.dependencies]
