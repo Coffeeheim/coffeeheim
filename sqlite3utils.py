@@ -25,7 +25,7 @@ def write_row(table_name: str, rowdict: dict, conn: sqlite3.Connection):
 
     rowdict = rowdict | {'create_date': now.isoformat()}
     columns = ','.join(rowdict.keys())
-    params = ', '.join(['?'] * len(rowdict))
+    params = ','.join(['?'] * len(rowdict))
     values = list(rowdict.values())
 
     cursor.execute(

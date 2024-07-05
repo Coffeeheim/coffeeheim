@@ -6,7 +6,7 @@ import paho.mqtt.client as paho
 from paho.mqtt.enums import CallbackAPIVersion
 
 import fileutils
-from sqlite3utils import create_table, write_row
+import sqlite3utils
 
 CLIENT_ID: str = os.environ.get('CLIENT_ID')  # type: ignore
 SQLITE_FILE: str = os.environ.get('SQLITE_FILE')  # type: ignore
@@ -24,7 +24,7 @@ sqlite3_conn = sqlite3.connect(SQLITE_FILE)
 
 def on_connect(client, userdata, flags, rc, properties=None):
     logging.info(f'CONNACK received with code {rc}.')
-    create_table(table_name=SQLITE_TABLE, conn=sqlite3_conn)
+    sqlite3utils.create_table(table_name=SQLITE_TABLE, conn=sqlite3_conn)
 
 
 def on_subscribe(client, userdata, mid, granted_qos, properties=None):
@@ -36,7 +36,7 @@ def on_message(client, userdata, msg):
 
     try:
         payload = str(msg.payload.decode())
-        write_row(
+        sqlite3utils.write_row(
             table_name=SQLITE_TABLE,
             rowdict={'steamid64': payload},
             conn=sqlite3_conn,
