@@ -6,8 +6,8 @@ from aws_lambda_powertools.event_handler.exceptions import NotFoundError
 
 def uri_validator(url: str) -> bool:
     try:
-        r = urlparse(url)
-        return all([r.scheme, r.netloc])
+        ret = urlparse(url)
+        return all([ret.scheme, ret.netloc])
     except Exception:
         return False
 

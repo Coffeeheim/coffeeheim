@@ -31,10 +31,11 @@ class Payload(BaseModel):
 def index(payload: Payload):
     steamid_64 = steamid.get_steamid_64(str(payload.steamid))
 
-    mqtt_pub.publish(
+    succ = mqtt_pub.publish(
         payload=steamid_64,
         mqtt_client=mqtt_client,
     )
+    logger.info(steamid_64, succ)
 
     return {}, HTTPStatus.CREATED
 
