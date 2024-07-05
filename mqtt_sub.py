@@ -7,7 +7,7 @@ from paho.mqtt.enums import CallbackAPIVersion
 import permittedlist
 
 CLIENT_ID: str = os.environ.get('CLIENT_ID')  # type: ignore
-CONFIG_FILE: str = os.environ.get('CONFIG_FILE')  # type: ignore
+PERMITTED_FILE: str = os.environ.get('PERMITTED_FILE')  # type: ignore
 MQTT_HOST: str = os.environ.get('MQTT_HOST')  # type: ignore
 MQTT_USERNAME: str = os.environ.get('MQTT_USERNAME')  # type: ignore
 MQTT_PASSWORD: str = os.environ.get('MQTT_PASSWORD')  # type: ignore
@@ -28,7 +28,7 @@ def on_message(client, userdata, msg):
 
     try:
         payload = str(msg.payload.decode())
-        permittedlist.append(CONFIG_FILE, payload)
+        permittedlist.append(PERMITTED_FILE, payload)
     except Exception:
         pass
 
@@ -48,7 +48,7 @@ client.on_connect = on_connect
 client.on_subscribe = on_subscribe
 client.on_message = on_message
 
-client.subscribe('steamid/#', qos=2)
+client.subscribe('steamid/#', qos=1)
 
 try:
     logging.info('Press CTRL+C to exit...')
