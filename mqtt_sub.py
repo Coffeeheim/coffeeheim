@@ -5,7 +5,7 @@ import sqlite3
 import paho.mqtt.client as paho
 from paho.mqtt.enums import CallbackAPIVersion
 
-import permittedlist
+import fileutils
 from sqlite3utils import create_table, write_row
 
 CLIENT_ID: str = os.environ.get('CLIENT_ID')  # type: ignore
@@ -41,7 +41,7 @@ def on_message(client, userdata, msg):
             rowdict={'steamid64': payload},
             conn=sqlite3_conn,
         )
-        permittedlist.append_row(PERMITTED_FILE, payload)
+        fileutils.append_row(PERMITTED_FILE, payload)
     except Exception as exc:
         logging.exception(exc)
 
