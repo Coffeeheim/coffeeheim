@@ -18,7 +18,7 @@ mqtt_client = paho.Client(
     protocol=paho.MQTTv5,
     callback_api_version=CallbackAPIVersion.VERSION2,
 )
-mqtt_client.tls_set(tls_version=paho.ssl.PROTOCOL_TLS_CLIENT)  # type: ignore
+mqtt_client.tls_set(tls_version=paho.ssl.PROTOCOL_TLS)  # type: ignore
 mqtt_client.username_pw_set(MQTT_USERNAME, MQTT_PASSWORD)
 mqtt_client.connect(MQTT_HOST, 8883)
 
