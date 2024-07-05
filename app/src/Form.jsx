@@ -47,7 +47,7 @@ export default function Form() {
       >
         {isSubmitSuccessful && (
           <p className="bg-green-100 p-2 border border-green-400">
-            You're already added. The password is{' '}
+            Done! The password is{' '}
             <span className="font-semibold bg-yellow-100 font-mono">
               fellowship
             </span>
