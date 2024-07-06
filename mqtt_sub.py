@@ -42,7 +42,7 @@ def on_message(client, userdata, msg):
             conn=sqlite3_conn,
         )
         fileutils.append_row(PERMITTED_FILE, payload)
-    except Exception as exc:
+    except Exception:
         pass
 
 

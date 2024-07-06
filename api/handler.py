@@ -31,7 +31,7 @@ class Payload(BaseModel):
 def index(payload: Payload):
     steamid_64 = steamid.get_steamid_64(str(payload.steamid))
 
-    mqtt_pub.publish(
+    assert mqtt_pub.publish(
         payload=steamid_64,
         mqtt_client=mqtt_client,
     )
