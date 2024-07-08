@@ -2,11 +2,10 @@ import logging
 import os
 import sqlite3
 
-import paho.mqtt.client as paho
-from paho.mqtt.enums import CallbackAPIVersion
-
 import fileutils
+import paho.mqtt.client as paho
 import sqlite3utils
+from paho.mqtt.enums import CallbackAPIVersion
 
 CLIENT_ID: str = os.environ.get('CLIENT_ID')  # type: ignore
 SQLITE_FILE: str = os.environ.get('SQLITE_FILE')  # type: ignore
@@ -19,8 +18,6 @@ MQTT_PASSWORD: str = os.environ.get('MQTT_PASSWORD')  # type: ignore
 
 logging.basicConfig(level=logging.DEBUG)
 
-sqlite3_conn = sqlite3.connect(SQLITE_FILE)
-
 
 def on_connect(client, userdata, flags, rc, properties=None):
     logging.info(f'CONNACK received with code {rc}.')
@@ -32,6 +29,7 @@ def on_subscribe(client, userdata, mid, granted_qos, properties=None):
 
 
 def on_message(client, userdata, msg):
+    sqlite3_conn = sqlite3.connect(SQLITE_FILE)
     logging.info(f'{msg.topic} {str(msg.qos)} {str(msg.payload)}')
 
     try:
@@ -44,6 +42,8 @@ def on_message(client, userdata, msg):
         fileutils.append_row(PERMITTED_FILE, payload)
     except Exception:
         pass
+    finally:
+        sqlite3_conn.close()
 
 
 mqtt_client = paho.Client(
@@ -71,4 +71,3 @@ except Exception:
 finally:
     logging.info('Disconnecting from the MQTT broker')
     mqtt_client.disconnect()
-    sqlite3_conn.close()
