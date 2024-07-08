@@ -1,11 +1,13 @@
 import logging
 import os
 import sqlite3
+from contextlib import closing
+
+import paho.mqtt.client as paho
+from paho.mqtt.enums import CallbackAPIVersion
 
 import fileutils
-import paho.mqtt.client as paho
 import sqlite3utils
-from paho.mqtt.enums import CallbackAPIVersion
 
 CLIENT_ID: str = os.environ.get('CLIENT_ID')  # type: ignore
 SQLITE_FILE: str = os.environ.get('SQLITE_FILE')  # type: ignore
@@ -21,9 +23,10 @@ logging.basicConfig(level=logging.DEBUG)
 
 def on_connect(client, userdata, flags, rc, properties=None):
     logging.info(f'CONNACK received with code {rc}.')
-    sqlite3_conn = sqlite3.connect(SQLITE_FILE)
-    sqlite3utils.create_table(table_name=SQLITE_TABLE, conn=sqlite3_conn)
-    sqlite3_conn.close()
+
+    with closing(sqlite3.connect(SQLITE_FILE)) as conn:
+        sqlite3utils.create_table(table_name=SQLITE_TABLE, conn=conn)
+        conn.close()
 
 
 def on_subscribe(client, userdata, mid, granted_qos, properties=None):
@@ -31,21 +34,19 @@ def on_subscribe(client, userdata, mid, granted_qos, properties=None):
 
 
 def on_message(client, userdata, msg):
-    sqlite3_conn = sqlite3.connect(SQLITE_FILE, timeout=10.0)
     logging.info(f'{msg.topic} {str(msg.qos)} {str(msg.payload)}')
 
-    try:
-        payload = str(msg.payload.decode())
-        sqlite3utils.write_row(
-            table_name=SQLITE_TABLE,
-            rowdict={'steamid64': payload},
-            conn=sqlite3_conn,
-        )
-        fileutils.append_row(PERMITTED_FILE, payload)
-    except Exception as exc:
-        logging.exception(exc)
-    finally:
-        sqlite3_conn.close()
+    with closing(sqlite3.connect(SQLITE_FILE)) as conn:
+        try:
+            payload = str(msg.payload.decode())
+            sqlite3utils.write_row(
+                table_name=SQLITE_TABLE,
+                rowdict={'steamid64': payload},
+                conn=conn,
+            )
+            fileutils.append_row(PERMITTED_FILE, payload)
+        except Exception as exc:
+            logging.exception(exc)
 
 
 mqtt_client = paho.Client(
