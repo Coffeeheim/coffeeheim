@@ -26,7 +26,6 @@ def on_connect(client, userdata, flags, rc, properties=None):
 
     with closing(sqlite3.connect(SQLITE_FILE)) as conn:
         sqlite3utils.create_table(table_name=SQLITE_TABLE, conn=conn)
-        conn.close()
 
 
 def on_subscribe(client, userdata, mid, granted_qos, properties=None):
@@ -46,7 +45,7 @@ def on_message(client, userdata, msg):
             )
             fileutils.append_row(PERMITTED_FILE, payload)
         except Exception as exc:
-            logging.exception(exc)
+            logging.error(str(exc))
 
 
 mqtt_client = paho.Client(
