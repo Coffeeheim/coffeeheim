@@ -45,7 +45,7 @@ def on_message(client, userdata, msg):
             )
             fileutils.append_row(PERMITTED_FILE, payload)
         except Exception as exc:
-            logging.error(str(exc))
+            logging.error(exc)
 
 
 mqtt_client = paho.Client(
