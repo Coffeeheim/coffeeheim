@@ -31,7 +31,7 @@ def on_subscribe(client, userdata, mid, granted_qos, properties=None):
 
 
 def on_message(client, userdata, msg):
-    sqlite3_conn = sqlite3.connect(SQLITE_FILE)
+    sqlite3_conn = sqlite3.connect(SQLITE_FILE, timeout=10.0)
     logging.info(f'{msg.topic} {str(msg.qos)} {str(msg.payload)}')
 
     try:
