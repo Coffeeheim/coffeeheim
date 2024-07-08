@@ -69,8 +69,8 @@ try:
     logging.info('Press CTRL+C to exit...')
     mqtt_client.loop_forever()
 except Exception as exc:
-    logging.exception(exc)
     logging.info('Caught an Exception, something went wrong...')
+    logging.exception(exc)
 finally:
     logging.info('Disconnecting from the MQTT broker')
     mqtt_client.disconnect()
