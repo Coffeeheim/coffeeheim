@@ -66,7 +66,8 @@ mqtt_client.subscribe('steamid/#', qos=1)
 try:
     logging.info('Press CTRL+C to exit...')
     mqtt_client.loop_forever()
-except Exception:
+except Exception as exc:
+    logging.exception(exc)
     logging.info('Caught an Exception, something went wrong...')
 finally:
     logging.info('Disconnecting from the MQTT broker')
