@@ -21,7 +21,9 @@ logging.basicConfig(level=logging.DEBUG)
 
 def on_connect(client, userdata, flags, rc, properties=None):
     logging.info(f'CONNACK received with code {rc}.')
+    sqlite3_conn = sqlite3.connect(SQLITE_FILE)
     sqlite3utils.create_table(table_name=SQLITE_TABLE, conn=sqlite3_conn)
+    sqlite3_conn.close()
 
 
 def on_subscribe(client, userdata, mid, granted_qos, properties=None):
