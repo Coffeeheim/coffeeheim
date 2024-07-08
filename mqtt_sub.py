@@ -40,8 +40,8 @@ def on_message(client, userdata, msg):
             conn=sqlite3_conn,
         )
         fileutils.append_row(PERMITTED_FILE, payload)
-    except Exception:
-        pass
+    except Exception as exc:
+        logging.exception(exc)
     finally:
         sqlite3_conn.close()
 
