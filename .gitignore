@@ -5,3 +5,4 @@ __pycache__
 .aws-sam/
 config/*
 data/
+redis-volume/

@@ -1,31 +1,34 @@
 import logging
 import os
-import sqlite3
-from contextlib import closing
+from datetime import datetime
 
 import paho.mqtt.client as paho
+import redis
 from paho.mqtt.enums import CallbackAPIVersion
+from pytz import timezone
 
 import fileutils
-import sqlite3utils
 
 CLIENT_ID: str = os.environ.get('CLIENT_ID')  # type: ignore
-SQLITE_FILE: str = os.environ.get('SQLITE_FILE')  # type: ignore
-SQLITE_TABLE: str = os.environ.get('SQLITE_TABLE')  # type: ignore
 PERMITTED_FILE: str = os.environ.get('PERMITTED_FILE')  # type: ignore
+TZ: str = os.environ.get('TZ')  # type: ignore
 
 MQTT_HOST: str = os.environ.get('MQTT_HOST')  # type: ignore
 MQTT_USERNAME: str = os.environ.get('MQTT_USERNAME')  # type: ignore
 MQTT_PASSWORD: str = os.environ.get('MQTT_PASSWORD')  # type: ignore
 
+
 logging.basicConfig(level=logging.DEBUG)
+
+r = redis.Redis.from_url('redis://redis:6379', decode_responses=True)
+
+
+class Steamid64ExistsError(Exception):
+    ...
 
 
 def on_connect(client, userdata, flags, rc, properties=None):
     logging.info(f'CONNACK received with code {rc}.')
-
-    with closing(sqlite3.connect(SQLITE_FILE)) as conn:
-        sqlite3utils.create_table(table_name=SQLITE_TABLE, conn=conn)
 
 
 def on_subscribe(client, userdata, mid, granted_qos, properties=None):
@@ -34,18 +37,22 @@ def on_subscribe(client, userdata, mid, granted_qos, properties=None):
 
 def on_message(client, userdata, msg):
     logging.info(f'{msg.topic} {str(msg.qos)} {str(msg.payload)}')
+    now = datetime.now(tz=timezone(TZ))
 
-    with closing(sqlite3.connect(SQLITE_FILE)) as conn:
-        try:
-            payload = str(msg.payload.decode())
-            sqlite3utils.write_row(
-                table_name=SQLITE_TABLE,
-                rowdict={'steamid64': payload},
-                conn=conn,
-            )
-            fileutils.append_row(PERMITTED_FILE, payload)
-        except Exception as exc:
-            logging.error(exc)
+    try:
+        steamid64 = str(msg.payload.decode())
+        succ = r.hsetnx(
+            name=f'permittedlist:{steamid64}',
+            key='create_date',
+            value=now.isoformat(),
+        )
+
+        if succ == 0:
+            raise Steamid64ExistsError
+
+        fileutils.append_row(PERMITTED_FILE, steamid64)
+    except Exception as exc:
+        logging.error(exc)
 
 
 mqtt_client = paho.Client(
