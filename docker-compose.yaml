@@ -1,6 +1,5 @@
 services:
   valheim:
-    container_name: coffeeheim
     image: ghcr.io/lloesche/valheim-server
     cap_add:
       - sys_nice
@@ -11,7 +10,7 @@ services:
       - '2456-2458:2456-2458/udp'
       - '9001:9001/tcp'
     environment:
-      - SERVER_PASS=${SERVER_PASS}
+      - SERVER_PASS=${VALHEIM_SERVER_PASS}
     env_file:
       - ./valheim.env
     restart: always
