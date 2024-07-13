@@ -9,13 +9,13 @@ import paho.mqtt.client as paho
 import redis
 from paho.mqtt.enums import CallbackAPIVersion
 
-CLIENT_ID: str = os.environ.get('CLIENT_ID')  # type: ignore
 PERMITTED_FILE: str = os.environ.get('PERMITTED_FILE')  # type: ignore
 TZ: str = os.environ.get('TZ')  # type: ignore
 
-MQTT_HOST: str = os.environ.get('MQTT_HOST')  # type: ignore
-MQTT_USERNAME: str = os.environ.get('MQTT_USERNAME')  # type: ignore
-MQTT_PASSWORD: str = os.environ.get('MQTT_PASSWORD')  # type: ignore
+MQTT_CLIENT_ID: str = os.environ.get('CLIENT_ID')  # type: ignore
+MQTT_HOST: str = os.environ.get('HOST')  # type: ignore
+MQTT_USERNAME: str = os.environ.get('USERNAME')  # type: ignore
+MQTT_PASSWORD: str = os.environ.get('PASSWORD')  # type: ignore
 
 
 logging.basicConfig(level=logging.DEBUG)
@@ -56,7 +56,7 @@ def on_message(client, userdata, msg):
 
 
 mqtt_client = paho.Client(
-    client_id=CLIENT_ID,
+    client_id=MQTT_CLIENT_ID,
     userdata=None,
     protocol=paho.MQTTv5,
     callback_api_version=CallbackAPIVersion.VERSION2,

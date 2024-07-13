@@ -33,11 +33,11 @@ services:
     depends_on:
       - redis
     environment:
-      - CLIENT_ID=Coffeeheim
       - PERMITTED_FILE=config/permittedlist.txt
       - TZ=America/Sao_Paulo
-      - MQTT_HOST=${MQTT_HOST}
-      - MQTT_USERNAME=${MQTT_USERNAME}
-      - MQTT_PASSWORD=${MQTT_PASSWORD}
+      - CLIENT_ID=${MQTT_CLIENT_ID}
+      - HOST=${MQTT_HOST}
+      - USERNAME=${MQTT_USERNAME}
+      - PASSWORD=${MQTT_PASSWORD}
     volumes:
       - .:/code
