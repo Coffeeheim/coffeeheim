@@ -2,15 +2,16 @@ import logging
 import os
 from datetime import datetime
 
-import paho.mqtt.client as paho
-import redis
-from paho.mqtt.enums import CallbackAPIVersion
 from pytz import timezone
 
 import fileutils
+import paho.mqtt.client as paho
+import redis
+from paho.mqtt.enums import CallbackAPIVersion
 
 CLIENT_ID: str = os.environ.get('CLIENT_ID')  # type: ignore
 PERMITTED_FILE: str = os.environ.get('PERMITTED_FILE')  # type: ignore
+REDIS_URL: str = os.environ.get('REDIS_URL')  # type: ignore
 TZ: str = os.environ.get('TZ')  # type: ignore
 
 MQTT_HOST: str = os.environ.get('MQTT_HOST')  # type: ignore
@@ -20,7 +21,7 @@ MQTT_PASSWORD: str = os.environ.get('MQTT_PASSWORD')  # type: ignore
 
 logging.basicConfig(level=logging.DEBUG)
 
-r = redis.Redis.from_url('redis://redis:6379', decode_responses=True)
+r = redis.Redis.from_url(REDIS_URL, decode_responses=True)
 
 
 class Steamid64ExistsError(Exception):
