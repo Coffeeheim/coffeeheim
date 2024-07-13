@@ -36,7 +36,6 @@ services:
       - CLIENT_ID=Coffeeheim
       - PERMITTED_FILE=config/permittedlist.txt
       - TZ=America/Sao_Paulo
-      - REDIS_URL=redis://redis:6379
       - MQTT_HOST=${MQTT_HOST}
       - MQTT_USERNAME=${MQTT_USERNAME}
       - MQTT_PASSWORD=${MQTT_PASSWORD}
