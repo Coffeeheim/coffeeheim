@@ -30,6 +30,8 @@ services:
   mqtt:
     build: .
     container_name: mqtt_sub
+    depends_on:
+      - redis
     environment:
       - CLIENT_ID=Coffeeheim
       - PERMITTED_FILE=config/permittedlist.txt
