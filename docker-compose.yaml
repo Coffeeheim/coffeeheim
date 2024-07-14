@@ -26,6 +26,7 @@ services:
     volumes:
       - ./redis.conf:/usr/local/etc/redis/redis.conf
       - ./redis-volume:/data
+    restart: always
 
   mqtt:
     build: .
@@ -41,3 +42,4 @@ services:
       - PASSWORD=${MQTT_PASSWORD}
     volumes:
       - .:/code
+    restart: always
