@@ -10,7 +10,9 @@ services:
     ports:
       - '2456-2458:2456-2458/udp'
       - '9001:9001/tcp'
+      - '8080:8080/tcp'
     environment:
+      - SUPERVISOR_HTTP_PASS=${SUPERVISOR_HTTP_PASS}
       - SERVER_PASS=${VALHEIM_SERVER_PASS}
     env_file:
       - ./valheim.env
@@ -18,7 +20,7 @@ services:
     stop_grace_period: 2m
 
   redis:
-    image: redis:latest
+    image: redis/redis-stack-server:latest
     container_name: redis
     ports:
       - '6379:6379'
