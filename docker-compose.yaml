@@ -12,6 +12,8 @@ services:
       - '9001:9001/tcp'
       - '8080:8080/tcp'
     environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
       - SUPERVISOR_HTTP_PASS=${SUPERVISOR_HTTP_PASS}
       - SERVER_PASS=${VALHEIM_SERVER_PASS}
     env_file:
