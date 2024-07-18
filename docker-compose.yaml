@@ -1,6 +1,7 @@
 services:
   valheim:
     image: ghcr.io/lloesche/valheim-server
+    platform: linux/amd64
     container_name: valheim
     cap_add:
       - sys_nice
@@ -43,5 +44,6 @@ services:
       - USERNAME=${MQTT_USERNAME}
       - PASSWORD=${MQTT_PASSWORD}
     volumes:
-      - .:/code
+      - ./:/code
+      - /code/.venv
     restart: always

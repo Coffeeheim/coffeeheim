@@ -3,6 +3,6 @@
 __pycache__
 .DS_Store
 .aws-sam/
-config/*
+config/
 data/
 redis-volume/

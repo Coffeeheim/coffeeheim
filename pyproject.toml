@@ -3,6 +3,7 @@ name = "coffeeheim"
 version = "0.1.0"
 description = "Yet another valheim server"
 authors = ["Sérgio Rafael Siqueira <osergiosiqueira@gmail.com>"]
+package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.12"

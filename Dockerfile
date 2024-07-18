@@ -1,19 +1,23 @@
-FROM python:3.12 as requirements-stage
+FROM python:3.12-slim as builder
+
+ENV POETRY_NO_INTERACTION=1 \
+    POETRY_VIRTUALENVS_IN_PROJECT=1 \
+    POETRY_VIRTUALENVS_CREATE=1 \
+    POETRY_CACHE_DIR=/tmp/poetry_cache
 
 WORKDIR /tmp
 
 RUN pip install poetry
 
-COPY ./pyproject.toml ./poetry.lock* /tmp/
+COPY pyproject.toml poetry.lock ./
+RUN --mount=type=cache,target=$POETRY_CACHE_DIR poetry install --without dev --no-root
 
-RUN poetry export -f requirements.txt --output requirements.txt --without-hashes
+FROM python:3.12-slim as runtime
 
-FROM python:3.12
+COPY --from=builder /tmp/.venv /code/.venv
 
 WORKDIR /code
 
-COPY --from=requirements-stage /tmp/requirements.txt /code/requirements.txt
-
-RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+ENV PATH="/code/.venv/bin:$PATH"
 
 CMD ["python", "-u", "mqtt_sub.py"]
