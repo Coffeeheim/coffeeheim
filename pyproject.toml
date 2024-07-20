@@ -13,6 +13,7 @@ paho-mqtt = "^2.1.0"
 pydantic = "^2.8.2"
 pytz = "^2024.1"
 redis = "^5.0.7"
+fastapi = "^0.111.1"
 
 
 [tool.poetry.group.dev.dependencies]

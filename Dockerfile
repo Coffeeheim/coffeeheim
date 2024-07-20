@@ -20,4 +20,5 @@ WORKDIR /code
 
 ENV PATH="/code/.venv/bin:$PATH"
 
-CMD ["python", "-u", "mqtt_sub.py"]
+#CMD ["python", "-u", "mqtt_sub.py"]
+CMD ["tail", "-f", "/dev/null"]
