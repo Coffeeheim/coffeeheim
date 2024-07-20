@@ -21,7 +21,7 @@ deploy:
 	sam build --use-container && sam deploy
 
 up:
-	FLUENTD_ADDRESS=${FLUENTD_ADDRESS} CLIENT_ID=${CLIENT_ID} PUID=${PUID} PGID=${PGID} \
+	FLUENTD_ADDRESS=${FLUENTD_ADDRESS} CLIENT_ID=${CLIENT_ID} PUID=${PUID} PGID=${PGID} && \
 	docker compose up -d --build
 
 down:
