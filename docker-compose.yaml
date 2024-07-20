@@ -1,3 +1,6 @@
+networks:
+  logging:
+
 services:
   valheim:
     image: ghcr.io/lloesche/valheim-server
@@ -11,7 +14,6 @@ services:
     ports:
       - '2456-2458:2456-2458/udp'
       - '9001:9001/tcp'
-      - '8080:8080/tcp'
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -21,6 +23,13 @@ services:
       - ./valheim.env
     restart: always
     stop_grace_period: 2m
+    depends_on:
+      - fluentd
+    logging:
+      driver: 'fluentd'
+      options:
+        fluentd-address: 'docker.for.mac.localhost:24224'
+        tag: 'docker.valheim'
 
   redis:
     image: redis/redis-stack-server:latest
@@ -38,6 +47,7 @@ services:
     container_name: mqtt_sub
     depends_on:
       - redis
+      - fluentd
     environment:
       - PERMITTED_FILE=config/permittedlist.txt
       - TZ=America/Sao_Paulo
@@ -49,3 +59,19 @@ services:
       - ./:/code
       - /code/.venv
     restart: always
+    logging:
+      driver: 'fluentd'
+      options:
+        fluentd-address: 'docker.for.mac.localhost:24224'
+        tag: 'docker.mqtt_sub'
+
+  fluentd:
+    image: fluent/fluentd:v1.14-1
+    container_name: fluentd
+    platform: linux/amd64
+    ports:
+      - '24224:24224'
+      - '24224:24224/udp'
+    volumes:
+      - ./fluent.conf:/fluentd/etc/fluent.conf
+      - ./logs:/fluentd/logs/
