@@ -72,7 +72,6 @@ services:
       - PASSWORD=${MQTT_PASSWORD}
     volumes:
       - ./:/code
-      - /code/.venv
     restart: always
     logging:
       driver: 'fluentd'
@@ -91,7 +90,6 @@ services:
       - runtime
     volumes:
       - ./:/code
-      - /code/.venv
     restart: always
     logging:
       driver: 'fluentd'
