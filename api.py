@@ -1,14 +1,14 @@
-import json
 from http import HTTPStatus
 from pathlib import Path
 
 from fastapi import FastAPI
 from fastapi.responses import FileResponse, JSONResponse
+from fileutils import json_content
 
 app = FastAPI()
 
 
-@app.get('/logs', response_class=JSONResponse)
+@app.get('/logs')
 async def logs(f: str = ''):
     dirname = 'logs/'
     basepath = Path(dirname)
@@ -41,13 +41,8 @@ async def logs(f: str = ''):
     return JSONResponse(content=files)
 
 
-@app.get('/status.json', response_class=JSONResponse)
+@app.get('/status.json')
 async def status():
-    filepath = Path('valheim-server/data/htdocs/status.json')
-    content = {}
-
-    if filepath.exists():
-        with filepath.open() as f:
-            content = json.load(f)
-
-    return JSONResponse(content=content)
+    return JSONResponse(
+        content=json_content('valheim-server/data/htdocs/status.json'),
+    )
