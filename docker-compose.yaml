@@ -1,32 +1,32 @@
 services:
-  # valheim:
-  #   image: ghcr.io/lloesche/valheim-server
-  #   platform: linux/amd64
-  #   container_name: valheim
-  #   cap_add:
-  #     - sys_nice
-  #   volumes:
-  #     - ./valheim-server/config:/config
-  #     - ./valheim-server/data:/opt/valheim
-  #   ports:
-  #     - '2456-2458:2456-2458/udp'
-  #     - '9001:9001/tcp'
-  #   environment:
-  #     - PUID=${PUID}
-  #     - PGID=${PGID}
-  #     - SUPERVISOR_HTTP_PASS=${SUPERVISOR_HTTP_PASS}
-  #     - SERVER_PASS=${VALHEIM_SERVER_PASS}
-  #   env_file:
-  #     - ./valheim.env
-  #   restart: always
-  #   stop_grace_period: 2m
-  #   depends_on:
-  #     - fluentd
-  #   logging:
-  #     driver: 'fluentd'
-  #     options:
-  #       fluentd-address: ${FLUENTD_ADDRESS}
-  #       tag: 'docker.valheim'
+  valheim:
+    image: ghcr.io/lloesche/valheim-server
+    platform: linux/amd64
+    container_name: valheim
+    cap_add:
+      - sys_nice
+    volumes:
+      - ./valheim-server/config:/config
+      - ./valheim-server/data:/opt/valheim
+    ports:
+      - '2456-2458:2456-2458/udp'
+      - '9001:9001/tcp'
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - SUPERVISOR_HTTP_PASS=${SUPERVISOR_HTTP_PASS}
+      - SERVER_PASS=${VALHEIM_SERVER_PASS}
+    env_file:
+      - ./valheim.env
+    restart: always
+    stop_grace_period: 2m
+    depends_on:
+      - fluentd
+    logging:
+      driver: 'fluentd'
+      options:
+        fluentd-address: ${FLUENTD_ADDRESS}
+        tag: 'docker.valheim'
 
   redis:
     image: redis:latest
