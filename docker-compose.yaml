@@ -1,43 +1,43 @@
 services:
-  valheim:
-    image: ghcr.io/lloesche/valheim-server
-    platform: linux/amd64
-    container_name: valheim
-    cap_add:
-      - sys_nice
-    volumes:
-      - ./valheim-server/config:/config
-      - ./valheim-server/data:/opt/valheim
-    ports:
-      - '2456-2458:2456-2458/udp'
-      - '9001:9001/tcp'
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - SUPERVISOR_HTTP_PASS=${SUPERVISOR_HTTP_PASS}
-      - SERVER_PASS=${VALHEIM_SERVER_PASS}
-    env_file:
-      - ./valheim.env
-    restart: always
-    stop_grace_period: 2m
-    depends_on:
-      - fluentd
-    logging:
-      driver: 'fluentd'
-      options:
-        fluentd-address: ${FLUENTD_ADDRESS}
-        tag: 'docker.valheim'
+  # valheim:
+  #   image: ghcr.io/lloesche/valheim-server
+  #   platform: linux/amd64
+  #   container_name: valheim
+  #   cap_add:
+  #     - sys_nice
+  #   volumes:
+  #     - ./valheim-server/config:/config
+  #     - ./valheim-server/data:/opt/valheim
+  #   ports:
+  #     - '2456-2458:2456-2458/udp'
+  #     - '9001:9001/tcp'
+  #   environment:
+  #     - PUID=${PUID}
+  #     - PGID=${PGID}
+  #     - SUPERVISOR_HTTP_PASS=${SUPERVISOR_HTTP_PASS}
+  #     - SERVER_PASS=${VALHEIM_SERVER_PASS}
+  #   env_file:
+  #     - ./valheim.env
+  #   restart: always
+  #   stop_grace_period: 2m
+  #   depends_on:
+  #     - fluentd
+  #   logging:
+  #     driver: 'fluentd'
+  #     options:
+  #       fluentd-address: ${FLUENTD_ADDRESS}
+  #       tag: 'docker.valheim'
 
   redis:
     image: redis:latest
     container_name: redis
-    ports:
-      - '6379:6379'
     command: ['redis-server', '/usr/local/etc/redis/redis.conf']
     volumes:
       - ./redis.conf:/usr/local/etc/redis/redis.conf
       - ./redis-volume:/data
     restart: always
+    networks:
+      - redis_network
 
   fluentd:
     image: fluent/fluentd:v1.14-1
@@ -51,7 +51,9 @@ services:
       - ./logs:/fluentd/logs/
 
   runtime:
-    build: python-requirements/
+    build:
+      context: .
+      dockerfile: python-requirements/Dockerfile
     image: runtime:latest
     container_name: runtime
 
@@ -78,13 +80,15 @@ services:
       options:
         fluentd-address: ${FLUENTD_ADDRESS}
         tag: 'docker.mqtt_sub'
+    networks:
+      - redis_network
 
   fastapi:
     image: runtime:latest
-    command: ['fastapi', 'run', 'api.py', '--port', '8080']
+    command: ['fastapi', 'run', 'api.py', '--port', '8001']
     container_name: fastapi
     ports:
-      - '8080:8080'
+      - '8001:8001'
     depends_on:
       - fluentd
       - runtime
@@ -96,3 +100,9 @@ services:
       options:
         fluentd-address: ${FLUENTD_ADDRESS}
         tag: 'docker.fastapi'
+    networks:
+      - redis_network
+
+networks:
+  redis_network:
+    driver: bridge

@@ -10,7 +10,8 @@ app = FastAPI()
 
 @app.get('/logs', response_class=JSONResponse)
 async def logs(f: str = ''):
-    basepath = Path('logs')
+    dirname = 'logs/'
+    basepath = Path(dirname)
     filepath = basepath / f
 
     try:
@@ -21,7 +22,6 @@ async def logs(f: str = ''):
             status_code=HTTPStatus.FORBIDDEN,
         )
 
-    print(filepath)
     if not filepath.exists():
         return JSONResponse(
             content=None,
@@ -31,13 +31,14 @@ async def logs(f: str = ''):
     if filepath.is_file():
         return FileResponse(filepath)
 
-    content = []
+    files = []
     for file in filepath.iterdir():
         if file.suffix == '.meta':
             continue
-        content.append(file.name if file.is_file() else f'{file.name}/')
+        filepath = str(file).removeprefix(dirname)
+        files.append(filepath if file.is_file() else f'{filepath}/')
 
-    return JSONResponse(content=content)
+    return JSONResponse(content=files)
 
 
 @app.get('/status.json', response_class=JSONResponse)
