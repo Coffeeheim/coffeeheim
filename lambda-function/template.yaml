@@ -3,7 +3,7 @@ Transform: AWS::Serverless-2016-10-31
 
 Globals:
   Function:
-    CodeUri: lambda_function/
+    CodeUri: .
     Runtime: python3.12
     Architectures:
       - x86_64

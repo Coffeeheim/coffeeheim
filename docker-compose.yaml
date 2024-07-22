@@ -51,7 +51,7 @@ services:
       - ./logs:/fluentd/logs/
 
   runtime:
-    build: .
+    build: python-requirements/
     image: runtime:latest
     container_name: runtime
 

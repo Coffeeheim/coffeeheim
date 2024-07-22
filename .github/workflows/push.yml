@@ -34,7 +34,10 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     timeout-minutes: 60
-    name: Build & Deploy
+    name: Build & Deploy to AWS Lambda
+    defaults:
+      run:
+        working-directory: ./lambda-function
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2

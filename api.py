@@ -3,7 +3,7 @@ from http import HTTPStatus
 from pathlib import Path
 
 from fastapi import FastAPI
-from fastapi.responses import JSONResponse, PlainTextResponse
+from fastapi.responses import FileResponse, JSONResponse
 
 app = FastAPI()
 
@@ -21,6 +21,7 @@ async def logs(f: str = ''):
             status_code=HTTPStatus.FORBIDDEN,
         )
 
+    print(filepath)
     if not filepath.exists():
         return JSONResponse(
             content=None,
@@ -28,7 +29,7 @@ async def logs(f: str = ''):
         )
 
     if filepath.is_file():
-        return PlainTextResponse(content=filepath.read_text())
+        return FileResponse(filepath)
 
     content = []
     for file in filepath.iterdir():

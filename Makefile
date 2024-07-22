@@ -15,10 +15,7 @@ export PUID
 export PGID
 
 requirements:
-	poetry export -f requirements.txt --output lambda_function/requirements.txt
-
-deploy:
-	sam build --use-container && sam deploy
+	poetry export -f requirements.txt --output lambda-function/requirements.txt
 
 up:
 	FLUENTD_ADDRESS=${FLUENTD_ADDRESS} CLIENT_ID=${CLIENT_ID} PUID=${PUID} PGID=${PGID} && \
