@@ -15,7 +15,7 @@ export PUID
 export PGID
 
 requirements:
-	poetry export -f requirements.txt --output api/requirements.txt
+	poetry export -f requirements.txt --output lambda_function/requirements.txt
 
 deploy:
 	sam build --use-container && sam deploy
