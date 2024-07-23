@@ -13,7 +13,7 @@ services:
       - '9001:9001/tcp'
     environment:
       - PUID=${PUID}
-      - PGID=${PGID}
+      - PGID=${PUID}
       - SUPERVISOR_HTTP_PASS=${SUPERVISOR_HTTP_PASS}
       - SERVER_PASS=${VALHEIM_SERVER_PASS}
     env_file:
@@ -29,21 +29,19 @@ services:
         tag: 'docker.valheim'
 
   fluentd:
-    image: fluent/fluentd:edge
+    build: ./fluentd
     container_name: fluentd
     platform: linux/amd64
     ports:
       - '24224:24224'
       - '24224:24224/udp'
     volumes:
-      - ./fluent.conf:/fluentd/etc/fluent.conf
       - ./logs:/fluentd/logs/
-    user: '${PUID}:${PGID}'
 
   runtime:
     build:
       context: .
-      dockerfile: python-requirements/Dockerfile
+      dockerfile: ./python-requirements/Dockerfile
     image: runtime:latest
     container_name: runtime
 
@@ -65,7 +63,6 @@ services:
     volumes:
       - ./:/code
     restart: always
-    user: '${PUID}:${PGID}'
     logging:
       driver: 'fluentd'
       options:
