@@ -20,13 +20,13 @@ services:
       - ./valheim.env
     restart: always
     stop_grace_period: 2m
-    depends_on:
-      - fluentd
-    logging:
-      driver: 'fluentd'
-      options:
-        fluentd-address: ${FLUENTD_ADDRESS}
-        tag: 'docker.valheim'
+      #depends_on:
+      # - fluentd
+      #logging:
+      #driver: 'fluentd'
+      #options:
+      #  fluentd-address: ${FLUENTD_ADDRESS}
+      # tag: 'docker.valheim'
 
   redis:
     image: redis:latest
@@ -64,7 +64,7 @@ services:
     command: ['python', '-u', 'mqtt_sub.py']
     depends_on:
       - redis
-      - fluentd
+        # - fluentd
       - runtime
     environment:
       - PERMITTED_FILE=valheim-server/config/permittedlist.txt
@@ -76,11 +76,11 @@ services:
     volumes:
       - ./:/code
     restart: always
-    logging:
-      driver: 'fluentd'
-      options:
-        fluentd-address: ${FLUENTD_ADDRESS}
-        tag: 'docker.mqtt_sub'
+      # logging:
+      #driver: 'fluentd'
+      # options:
+      # fluentd-address: ${FLUENTD_ADDRESS}
+      #  tag: 'docker.mqtt_sub'
     networks:
       - redis_network
 
@@ -96,11 +96,11 @@ services:
     volumes:
       - ./:/code
     restart: always
-    logging:
-      driver: 'fluentd'
-      options:
-        fluentd-address: ${FLUENTD_ADDRESS}
-        tag: 'docker.fastapi'
+      #logging:
+      # driver: 'fluentd'
+      #options:
+      #  fluentd-address: ${FLUENTD_ADDRESS}
+      #  tag: 'docker.fastapi'
     networks:
       - redis_network
 
