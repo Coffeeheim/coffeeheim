@@ -6,3 +6,4 @@
 - https://thunderstore.io/c/valheim/p/ComfyMods/QuietWindmills/
 - https://thunderstore.io/c/valheim/p/MSchmoecker/LocalizationCache/
 - https://thunderstore.io/c/valheim/p/Smoothbrain/SmoothSave/
+- https://thunderstore.io/c/valheim/p/JereKuusela/Upgrade_World/
