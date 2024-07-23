@@ -1,16 +1,17 @@
 import logging
 import os
-from datetime import datetime
+import sqlite3
+from contextlib import closing
 
-from pytz import timezone
-
-import fileutils
 import paho.mqtt.client as paho
-import redis
 from paho.mqtt.enums import CallbackAPIVersion
 
+import fileutils
+import sqlite3utils
+
+TABLE_NAME = 'permittedlist'
 PERMITTED_FILE: str = os.environ.get('PERMITTED_FILE')  # type: ignore
-TZ: str = os.environ.get('TZ')  # type: ignore
+DATABASE_FILE: str = os.environ.get('DATABASE_FILE')  # type: ignore
 
 MQTT_CLIENT_ID: str = os.environ.get('CLIENT_ID')  # type: ignore
 MQTT_HOST: str = os.environ.get('HOST')  # type: ignore
@@ -20,15 +21,12 @@ MQTT_PASSWORD: str = os.environ.get('PASSWORD')  # type: ignore
 
 logging.basicConfig(level=logging.DEBUG)
 
-r = redis.Redis.from_url('redis://redis:6379', decode_responses=True)
-
-
-class Steamid64ExistsError(Exception):
-    ...
-
 
 def on_connect(client, userdata, flags, rc, properties=None):
     logging.info(f'CONNACK received with code {rc}.')
+
+    with closing(sqlite3.connect(DATABASE_FILE)) as conn:
+        sqlite3utils.create_table(table_name=TABLE_NAME, conn=conn)
 
 
 def on_subscribe(client, userdata, mid, granted_qos, properties=None):
@@ -37,22 +35,18 @@ def on_subscribe(client, userdata, mid, granted_qos, properties=None):
 
 def on_message(client, userdata, msg):
     logging.info(f'{msg.topic} {str(msg.qos)} {str(msg.payload)}')
-    now = datetime.now(tz=timezone(TZ))
 
-    try:
-        steamid64 = str(msg.payload.decode())
-        succ = r.hsetnx(
-            name=f'permittedlist:{steamid64}',
-            key='create_date',
-            value=now.isoformat(),
-        )
-
-        if succ == 0:
-            raise Steamid64ExistsError
-
-        fileutils.append_row(PERMITTED_FILE, steamid64)
-    except Exception as exc:
-        logging.exception(exc)
+    with closing(sqlite3.connect(DATABASE_FILE)) as conn:
+        try:
+            payload = str(msg.payload.decode())
+            sqlite3utils.write_row(
+                table_name=TABLE_NAME,
+                rowdict={'steamid64': payload},
+                conn=conn,
+            )
+            fileutils.append_row(PERMITTED_FILE, payload)
+        except Exception as exc:
+            logging.error(exc)
 
 
 mqtt_client = paho.Client(

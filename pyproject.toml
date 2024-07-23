@@ -12,7 +12,6 @@ aws-lambda-powertools = "^2.40.1"
 paho-mqtt = "^2.1.0"
 pydantic = "^2.8.2"
 pytz = "^2024.1"
-redis = "^5.0.7"
 fastapi = "^0.111.1"
 
 
