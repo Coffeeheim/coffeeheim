@@ -8,6 +8,19 @@ from pytz import timezone
 TZ: str = os.environ.get('TZ')  # type: ignore
 
 
+class SQLite:
+    def __init__(self, database):
+        self.database = database
+
+    def __enter__(self):
+        self.conn = sqlite3.connect(self.database)
+        return self.conn.cursor()
+
+    def __exit__(self, exc_type, exc, exc_tb):
+        self.conn.commit()
+        self.conn.close()
+
+
 def create_table(
     table_name: str,
     conn: sqlite3.Connection,

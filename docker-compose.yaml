@@ -54,7 +54,7 @@ services:
       - runtime
     environment:
       - PERMITTED_FILE=valheim-server/config/permittedlist.txt
-      - DATABASE_FILE=valheim-server/players.db
+      - DATABASE_FILE=valheim-server/coffeeheim.db
       - TZ=America/Sao_Paulo
       - CLIENT_ID=${CLIENT_ID}
       - HOST=${MQTT_HOST}
@@ -78,6 +78,8 @@ services:
     depends_on:
       - fluentd
       - runtime
+    environment:
+      - DATABASE_FILE=valheim-server/coffeeheim.db
     volumes:
       - ./:/code
     restart: always
