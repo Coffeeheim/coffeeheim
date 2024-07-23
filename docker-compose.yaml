@@ -40,7 +40,7 @@ services:
       - redis_network
 
   fluentd:
-    image: fluent/fluentd:v1.14-1
+    image: fluent/fluentd:edge
     container_name: fluentd
     platform: linux/amd64
     ports:
@@ -49,6 +49,7 @@ services:
     volumes:
       - ./fluent.conf:/fluentd/etc/fluent.conf
       - ./logs:/fluentd/logs/
+    user: '${PUID}:${PGID}'
 
   runtime:
     build:

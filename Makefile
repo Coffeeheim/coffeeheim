@@ -1,6 +1,6 @@
 OS := $(shell uname)
-PUID := $(shell id -u $(USER))
-PGID := $(shell id -g $(USER))
+PUID := $(shell id -u)
+PGID := $(shell id -g)
 CLIENT_ID := $(shell uname -n)
 
 ifeq ($(OS), Darwin)
