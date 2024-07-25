@@ -27,9 +27,15 @@ def create_table(
 ):
     with closing(conn.cursor()) as cursor:
         cursor.execute(
-            f'CREATE TABLE IF NOT EXISTS {table_name} \
-            (steamid64 TEXT UNIQUE, banned BOOL DEFAULT 0, \
-            admin BOOL DEFAULT 0, create_date DATETIME)',
+            f"""
+            CREATE TABLE IF NOT EXISTS {table_name} (
+                steamid64 TEXT UNIQUE NOT NULL,
+                banned BOOL DEFAULT 0,
+                admin BOOL DEFAULT 0,
+                last_login DATETIME,
+                create_date DATETIME NOT NULL
+            )
+            """
         )
 
     conn.commit()

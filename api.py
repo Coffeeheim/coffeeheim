@@ -4,11 +4,9 @@ from pathlib import Path
 
 from fastapi import FastAPI
 from fastapi.responses import FileResponse, JSONResponse
-
 from fileutils import json_content
 from sqlite3utils import SQLite
 
-TABLE_NAME = 'permittedlist'
 DATABASE_FILE: str = os.environ.get('DATABASE_FILE')  # type: ignore
 
 app = FastAPI()
@@ -50,7 +48,7 @@ async def logs(f: str = ''):
 @app.get('/players')
 async def players():
     with SQLite(DATABASE_FILE) as cur:
-        cur.execute(f'SELECT * FROM {TABLE_NAME}')
+        cur.execute(f'SELECT * FROM permittedlist ORDER BY create_date DESC')
         columns = [x[0] for x in cur.description]
         content = [dict(zip(columns, x)) for x in cur.fetchall()]
 
