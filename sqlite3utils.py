@@ -1,6 +1,5 @@
 import os
 import sqlite3
-from contextlib import closing
 from datetime import datetime
 
 from pytz import timezone
