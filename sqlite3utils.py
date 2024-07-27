@@ -23,10 +23,10 @@ class SQLite:
 
 def create_table(
     table_name: str,
-    conn: sqlite3.Connection,
+    conn: SQLite,
 ):
-    with closing(conn.cursor()) as cursor:
-        cursor.execute(
+    with conn as cur:
+        cur.execute(
             f"""
             CREATE TABLE IF NOT EXISTS {table_name} (
                 steamid64 TEXT UNIQUE NOT NULL,
@@ -38,13 +38,11 @@ def create_table(
             """
         )
 
-    conn.commit()
-
 
 def write_row(
     table_name: str,
     rowdict: dict,
-    conn: sqlite3.Connection,
+    conn: SQLite,
     *,
     tz: str = TZ,
 ):
@@ -54,10 +52,8 @@ def write_row(
     params = ','.join(['?'] * len(rowdict))
     values = list(rowdict.values())
 
-    with conn as cursor:
-        cursor.execute(
+    with conn as cur:
+        cur.execute(
             f'INSERT INTO {table_name} ({columns}) VALUES ({params})',
             values,
         )
-
-    conn.commit()

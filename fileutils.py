@@ -2,25 +2,26 @@ import json
 from pathlib import Path
 
 
-def append_row(filepath: str, steamid: str) -> bool | None:
-    filepath_ = Path(filepath)
-    if not filepath_.exists():
+def append_row(rawpath: str, s: str) -> bool | None:
+    filepath = Path(rawpath)
+
+    if not filepath.exists():
         raise FileNotFoundError
 
-    with filepath_.open('a') as f:
+    with filepath.open('a') as f:
         try:
-            f.write(f'{steamid}\n')
+            f.write(f'{s}\n')
         except Exception:
             return None
         else:
             return True
 
 
-def json_content(filepath: str) -> dict:
-    filepath_ = Path(filepath)
+def json_content(rawpath: str) -> dict:
+    filepath = Path(rawpath)
 
-    if not filepath_.exists():
+    if not filepath.exists():
         return {}
 
-    with filepath_.open() as fp:
+    with filepath.open() as fp:
         return json.load(fp)

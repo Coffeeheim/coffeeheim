@@ -1,13 +1,11 @@
 import logging
 import os
-import sqlite3
-from contextlib import closing
-
-import paho.mqtt.client as paho
-from paho.mqtt.enums import CallbackAPIVersion
 
 import fileutils
+import paho.mqtt.client as paho
 import sqlite3utils
+from paho.mqtt.enums import CallbackAPIVersion
+from sqlite3utils import SQLite, create_table, write_row
 
 TABLE_NAME = 'permittedlist'
 PERMITTED_FILE: str = os.environ.get('PERMITTED_FILE')  # type: ignore
@@ -19,14 +17,14 @@ MQTT_USERNAME: str = os.environ.get('USERNAME')  # type: ignore
 MQTT_PASSWORD: str = os.environ.get('PASSWORD')  # type: ignore
 
 
+conn = SQLite(DATABASE_FILE)
 logging.basicConfig(level=logging.DEBUG)
 
 
 def on_connect(client, userdata, flags, rc, properties=None):
     logging.info(f'CONNACK received with code {rc}.')
 
-    with closing(sqlite3.connect(DATABASE_FILE)) as conn:
-        sqlite3utils.create_table(table_name=TABLE_NAME, conn=conn)
+    create_table(table_name=TABLE_NAME, conn=conn)
 
 
 def on_subscribe(client, userdata, mid, granted_qos, properties=None):
@@ -36,17 +34,16 @@ def on_subscribe(client, userdata, mid, granted_qos, properties=None):
 def on_message(client, userdata, msg):
     logging.info(f'{msg.topic} {str(msg.qos)} {str(msg.payload)}')
 
-    with closing(sqlite3.connect(DATABASE_FILE)) as conn:
-        try:
-            payload = str(msg.payload.decode())
-            sqlite3utils.write_row(
-                table_name=TABLE_NAME,
-                rowdict={'steamid64': payload},
-                conn=conn,
-            )
-            fileutils.append_row(PERMITTED_FILE, payload)
-        except Exception as exc:
-            logging.error(exc)
+    try:
+        payload = str(msg.payload.decode())
+        write_row(
+            table_name=TABLE_NAME,
+            rowdict={'steamid64': payload},
+            conn=conn,
+        )
+        fileutils.append_row(PERMITTED_FILE, payload)
+    except Exception as exc:
+        logging.error(exc)
 
 
 mqtt_client = paho.Client(
