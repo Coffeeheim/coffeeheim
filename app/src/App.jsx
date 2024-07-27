@@ -1,4 +1,5 @@
 import { ReactComponent as Discordsvg } from './discord.svg'
+import { ReactComponent as Kovisvg } from './kofi.svg'
 import coffeeheim from './coffeeheim-512x512.webp'
 import Form from './Form'
 import Rules from './Rules'
@@ -15,6 +16,18 @@ function Discord() {
   )
 }
 
+function Kofi() {
+  return (
+    <a
+      href="https://ko-fi.com/coffeeheim"
+      className="inline-flex gap-2 bg-red-50 hover:bg-red-100 border border-red-200 rounded-lg p-2"
+    >
+      <Kovisvg className="fill-red-500 h-6" />
+      Donate to the server
+    </a>
+  )
+}
+
 function App() {
   return (
     <div className="max-w-screen-md mx-auto">
@@ -24,13 +37,12 @@ function App() {
             <img src={coffeeheim} alt="Coffeeheim" title="Coffeeheim" />
           </div>
           <h1 className="font-bold text-5xl">Coffeeheim</h1>
-          <div>
-            <span className="bg-green-600 text-white text-xs py-0.5 px-1 rounded-full">
-              24/7
-            </span>
-          </div>
         </div>
-        <Discord />
+
+        <div className="flex gap-2">
+          <Discord />
+          <Kofi />
+        </div>
       </header>
 
       <section className="space-y-2.5">
