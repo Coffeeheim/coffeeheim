@@ -3,7 +3,6 @@ import os
 
 import fileutils
 import paho.mqtt.client as paho
-import sqlite3utils
 from paho.mqtt.enums import CallbackAPIVersion
 from sqlite3utils import SQLite, create_table, write_row
 
