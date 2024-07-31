@@ -50,7 +50,6 @@ services:
     container_name: mqtt_sub
     command: ['python', '-u', 'mqtt_sub.py']
     depends_on:
-      - fluentd
       - runtime
     environment:
       - PERMITTED_FILE=valheim-server/config/permittedlist.txt
@@ -63,11 +62,6 @@ services:
     volumes:
       - ./:/code
     restart: always
-    logging:
-      driver: 'fluentd'
-      options:
-        fluentd-address: ${FLUENTD_ADDRESS}
-        tag: 'docker.mqtt_sub'
 
   fastapi:
     image: runtime:latest
@@ -76,15 +70,9 @@ services:
     ports:
       - '8001:8001'
     depends_on:
-      - fluentd
       - runtime
     environment:
       - DATABASE_FILE=valheim-server/coffeeheim.db
     volumes:
       - ./:/code
     restart: always
-    logging:
-      driver: 'fluentd'
-      options:
-        fluentd-address: ${FLUENTD_ADDRESS}
-        tag: 'docker.fastapi'
