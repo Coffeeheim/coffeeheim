@@ -1,15 +1,7 @@
-OS := $(shell uname)
 PUID := $(shell id -u)
 PGID := $(shell id -g)
 CLIENT_ID := $(shell uname -n)
 
-ifeq ($(OS), Darwin)
-  FLUENTD_ADDRESS := docker.for.mac.localhost:24224
-else
-  FLUENTD_ADDRESS := localhost:24224
-endif
-
-export FLUENTD_ADDRESS
 export CLIENT_ID
 export PUID
 export PGID
@@ -18,7 +10,7 @@ requirements:
 	poetry export -f requirements.txt --output lambda-function/requirements.txt
 
 up:
-	FLUENTD_ADDRESS=${FLUENTD_ADDRESS} CLIENT_ID=${CLIENT_ID} PUID=${PUID} PGID=${PGID} && \
+	CLIENT_ID=${CLIENT_ID} PUID=${PUID} PGID=${PGID} && \
 	docker compose up -d --build
 
 down:

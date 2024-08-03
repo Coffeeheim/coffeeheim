@@ -21,22 +21,23 @@ services:
     restart: always
     stop_grace_period: 2m
     depends_on:
-      - fluentd
+      - fluentbit
     logging:
       driver: 'fluentd'
       options:
-        fluentd-address: ${FLUENTD_ADDRESS}
-        tag: 'docker.valheim'
+        tag: valheim
 
-  fluentd:
-    build: ./fluentd
-    container_name: fluentd
-    platform: linux/amd64
+  fluentbit:
+    image: fluent/fluent-bit:latest
+    container_name: fluentbit
     ports:
       - '24224:24224'
       - '24224:24224/udp'
     volumes:
-      - ./logs:/fluentd/logs/
+      - ./logs:/fluent-bit/logs/
+      - ./fluent-bit/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
+      - ./fluent-bit/parsers.conf:/fluent-bit/etc/parsers.conf
+    restart: always
 
   runtime:
     build:
@@ -51,6 +52,7 @@ services:
     command: ['python', '-u', 'mqtt_sub.py']
     depends_on:
       - runtime
+      - fluentbit
     environment:
       - PERMITTED_FILE=valheim-server/config/permittedlist.txt
       - DATABASE_FILE=valheim-server/coffeeheim.db
@@ -62,6 +64,10 @@ services:
     volumes:
       - ./:/code
     restart: always
+    logging:
+      driver: fluentd
+      options:
+        tag: mqtt_sub
 
   fastapi:
     image: runtime:latest
@@ -76,3 +82,7 @@ services:
     volumes:
       - ./:/code
     restart: always
+    logging:
+      driver: fluentd
+      options:
+        tag: fastapi
