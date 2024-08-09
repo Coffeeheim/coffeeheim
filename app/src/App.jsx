@@ -54,12 +54,36 @@ function App() {
           </h3>
           <iframe
             className="w-full aspect-video"
-            src="https://www.youtube.com/embed/2RQA8WurZlI?si=f8_YGAiRr0ZrYyMM&amp;controls=0"
+            src="https://www.youtube.com/embed/IAvt_V4rCa8?si=mxgF3uW9NmHFa0t-&amp;controls=0"
             title="YouTube video player"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             referrerPolicy="strict-origin-when-cross-origin"
             allowFullScreen
           />
+        </div>
+      </section>
+
+      <section className="mt-4 bg-gray-100 px-4 py-2.5 rounded">
+        <div className="flex justify-between">
+          <span>&copy; {new Date().getFullYear()} Coffeeheim</span>
+          <ul className="flex gap-2.5 text-indigo-500">
+            <li>
+              <a
+                href="https://github.com/sergiors/coffeeheim"
+                className="underline hover:no-underline"
+              >
+                GitHub
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://uptime.sergio.run"
+                className="underline hover:no-underline"
+              >
+                Status
+              </a>
+            </li>
+          </ul>
         </div>
       </section>
     </div>
