@@ -77,7 +77,7 @@ function App() {
             </li>
             <li>
               <a
-                href="https://uptime.sergio.run"
+                href="https://uptime.coffeeheim.com"
                 className="underline hover:no-underline"
               >
                 Status
